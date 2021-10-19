@@ -21,11 +21,13 @@ contract DStore {
     uint curId;
     Product[] array;
     address public admin;
+    uint tollPercent;
 
-    constructor(uint _startId){
+    constructor(uint _tollPercent,uint _startId){
         startId=_startId;
         curId = startId;
         admin=msg.sender;
+        tollPercent=_tollPercent;
     }
 
     modifier expectsValidId(uint id){
@@ -113,8 +115,14 @@ contract DStore {
     function buy(uint id) public payable {
 
         Product storage product=getProduct(id);
+        uint price=product.price;
+        
+        uint ownerGain=price*(100-tollPercent)/100;
+        product.owner.transfer(ownerGain);
 
-        product.owner.transfer(msg.value);
+        //not needed(& doesn't work); it's done automatically 
+        //uint contractGain=price*tollPercent/100;
+        //payable(address(this)).transfer(contractGain);
         
         product.soldTo=msg.sender;
         product.available=false;

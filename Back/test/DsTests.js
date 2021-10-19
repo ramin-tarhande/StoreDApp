@@ -11,7 +11,7 @@ contract("DStore" , async(accounts)=>{
     let oneWei;
 
     beforeEach("make instance" , async()=>{
-         instance = await DStore.new(901);
+         instance = await DStore.new(10,901);
          admin=accounts[0];
          oneEther=toEther(1);
          tenEthers=toEther(10);
@@ -217,11 +217,12 @@ contract("DStore" , async(accounts)=>{
         it("update product" , async()=>{
 
             //Arange
-            await instance.add('pen',threeEthers);
+            const price=threeEthers;
+            await instance.add('pen',price);
    
             //Act
             const all1 = await instance.getAll();
-            await instance.buy(all1[0].id, { from : accounts[1]});
+            await instance.buy(all1[0].id, { from : accounts[1], value: price});
             
             //Assert
             const all2 = await instance.getAll();
@@ -252,7 +253,7 @@ contract("DStore" , async(accounts)=>{
             console.log(`  ${x.diff.toString()} (diff)`);
         }
 
-        it("transfer money" , async()=>{
+        it.only("transfer money" , async()=>{
 
             //Arange
             const price=threeEthers;
@@ -262,7 +263,9 @@ contract("DStore" , async(accounts)=>{
             
             let ownerBalance=new Object();
             let buyerBalance=new Object();
+            let contractBalance=new Object();
 
+            contractBalance.initial = await getAccountBalance(instance.address);
             ownerBalance.initial = await getAccountBalance(owner);
             buyerBalance.initial = await getAccountBalance(buyer);
             
@@ -271,20 +274,30 @@ contract("DStore" , async(accounts)=>{
             const receipt = await instance.buy(all[0].id, { from : buyer, value: price});
                         
             //Assert
+            contractBalance.final = await getAccountBalance(instance.address);
             ownerBalance.final = await getAccountBalance(owner);
             buyerBalance.final = await getAccountBalance(buyer);
 
+            contractBalance.diff=contractBalance.final.sub(contractBalance.initial);
             ownerBalance.diff=ownerBalance.final.sub(ownerBalance.initial);
             buyerBalance.diff=buyerBalance.initial.sub(buyerBalance.final);
             
             //logAb('ownerBalance',ownerBalance);
             //logAb('buyerBalance',buyerBalance);
+            //logAb('contractBalance',contractBalance);
    
             const gasTotal=await getGasTotal(receipt);
             //console.log(`gasFee: ${gasFee}`); 
+            //console.log(`${instance.address}`); 
 
-            assert.equal(price.toString(),ownerBalance.diff.toString(),'owner diff');
-            assert.equal(price.add(gasTotal).toString(),buyerBalance.diff.toString(),'buyer diff');
+            const ownerGain=price.muln(9).divn(10);
+            const contractGain=price.muln(1).divn(10);
+            const buyerPay=price.add(gasTotal);
+            //console.log(`ownerGain: ${ownerGain}`); 
+
+            assert.equal(contractGain.toString(),contractBalance.diff.toString(),'contract diff');
+            assert.equal(ownerGain.toString(),ownerBalance.diff.toString(),'owner diff');
+            assert.equal(buyerPay.toString(),buyerBalance.diff.toString(),'buyer diff');
         });
         
     }); //buy
