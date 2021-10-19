@@ -1,5 +1,8 @@
 const DStore = artifacts.require("DStore");
 const truffleAssert = require('truffle-assertions'); 
+//const BN = web3.utils.BN;
+const toBN = web3.utils.toBN;
+//const BN = require('bn.js');
 
 contract("DStore" , async(accounts)=>{
 
@@ -19,7 +22,8 @@ contract("DStore" , async(accounts)=>{
     });
 
     function toEther(num){
-        return web3.utils.toBN(web3.utils.toWei(num.toString(), "ether"));
+        //return web3.utils.toBN(web3.utils.toWei(num.toString(), "ether"));
+        return toBN(web3.utils.toWei(num.toString(), "ether"));
     }
 
     describe("add product", async()=>{
@@ -216,7 +220,7 @@ contract("DStore" , async(accounts)=>{
     }); //delete
 
 
-    describe.only("buy", async()=>{
+    describe("buy", async()=>{
         it("update product" , async()=>{
 
             //Arange
@@ -234,36 +238,60 @@ contract("DStore" , async(accounts)=>{
             assert.equal(accounts[1] , r.soldTo);
         });
 
+        async function getGasFee(receipt){
+            const gasUsed = receipt.receipt.gasUsed;
+            const tx = await web3.eth.getTransaction(receipt.tx);
+            const gasPrice = tx.gasPrice;
+            const gasFee=toBN(gasPrice*gasUsed);
+            return gasFee;
+        }
+
+        async function getAccountBalance(account){
+            const u=await web3.eth.getBalance(account);
+            const v=toBN(u);
+            return v;
+        }
+
+        function logAb(title,x){
+            console.log(`${title}:`);
+            console.log(`  ${x.initial.toString()} (initial)`);
+            console.log(`  ${x.final.toString()} (final)`);
+            console.log(`  ${x.diff.toString()} (diff)`);
+        }
+
         it("transfer money" , async()=>{
 
             //Arange
             const price=threeEthers;
-            const owner=accounts[1];
-            const buyer=accounts[2];
+            const owner=accounts[2];
+            const buyer=accounts[3];
             await instance.add('pen',price, { from : owner});
             
-            const ownerBalBefore = await web3.eth.getBalance(owner);
-            const buyerBalBefore = await web3.eth.getBalance(buyer);
-   
+            let ownerBalance=new Object();
+            let buyerBalance=new Object();
+
+            ownerBalance.initial = await getAccountBalance(owner);
+            buyerBalance.initial = await getAccountBalance(buyer);
+            
             //Act
             const all = await instance.getAll();
             const receipt = await instance.buy(all[0].id, { from : buyer, value: price});
-            const gasUsed = receipt.receipt.gasUsed;
-            console.log(`GasUsed: ${gasUsed}`);
-            
+                        
             //Assert
-            const ownerBalAfter = await web3.eth.getBalance(owner);
-            const buyerBalAfter = await web3.eth.getBalance(buyer);
-   
-            console.log(`price: ${price}`);
-            const diffOwner=ownerBalAfter-ownerBalBefore;
-            const diffBuyer=buyerBalBefore-buyerBalAfter;
-            //console.log(`owner: ${ownerBalBefore}->${ownerBalAfter}`);
-            console.log(`diffOwner: ${diffOwner}`);
-            console.log(`diffBuyer: ${diffBuyer}`);
+            ownerBalance.final = await getAccountBalance(owner);
+            buyerBalance.final = await getAccountBalance(buyer);
 
-            assert.equal(price,diffOwner);
-            assert.equal(price+gasUsed,diffBuyer);
+            ownerBalance.diff=ownerBalance.final.sub(ownerBalance.initial);
+            buyerBalance.diff=buyerBalance.initial.sub(buyerBalance.final);
+            
+            //logAb('ownerBalance',ownerBalance);
+            //logAb('buyerBalance',buyerBalance);
+   
+            const gasFee=await getGasFee(receipt);
+            //console.log(`gasFee: ${gasFee}`); 
+
+            assert.equal(price.toString(),ownerBalance.diff.toString(),'owner diff');
+            assert.equal(price.add(gasFee).toString(),buyerBalance.diff.toString(),'buyer diff');
         });
         
     }); //buy
