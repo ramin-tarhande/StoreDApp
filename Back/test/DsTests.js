@@ -253,7 +253,7 @@ contract("DStore" , async(accounts)=>{
             console.log(`  ${x.diff.toString()} (diff)`);
         }
 
-        it.only("transfer money" , async()=>{
+        it.only("money transfer" , async()=>{
 
             //Arange
             const price=threeEthers;
@@ -287,13 +287,10 @@ contract("DStore" , async(accounts)=>{
             //logAb('contractBalance',contractBalance);
    
             const gasTotal=await getGasTotal(receipt);
-            //console.log(`gasFee: ${gasFee}`); 
-            //console.log(`${instance.address}`); 
 
             const ownerGain=price.muln(9).divn(10);
             const contractGain=price.muln(1).divn(10);
             const buyerPay=price.add(gasTotal);
-            //console.log(`ownerGain: ${ownerGain}`); 
 
             assert.equal(contractGain.toString(),contractBalance.diff.toString(),'contract diff');
             assert.equal(ownerGain.toString(),ownerBalance.diff.toString(),'owner diff');

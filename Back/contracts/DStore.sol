@@ -120,7 +120,7 @@ contract DStore {
         uint ownerGain=price*(100-tollPercent)/100;
         product.owner.transfer(ownerGain);
 
-        //not needed(& doesn't work); it's done automatically 
+        //not needed(& doesn't work this way); it's done automatically 
         //uint contractGain=price*tollPercent/100;
         //payable(address(this)).transfer(contractGain);
         
