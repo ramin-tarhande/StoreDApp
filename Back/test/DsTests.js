@@ -218,7 +218,7 @@ contract("DStore" , async(accounts)=>{
 
             //Arange
             const price=threeEthers;
-            await instance.add('pen',price);
+            await instance.add('pen',price, { from : accounts[0] });
    
             //Act
             const all1 = await instance.getAll();
@@ -253,7 +253,7 @@ contract("DStore" , async(accounts)=>{
             console.log(`  ${x.diff.toString()} (diff)`);
         }
 
-        it.only("money transfer" , async()=>{
+        it("money transfer" , async()=>{
 
             //Arange
             const price=threeEthers;
@@ -296,6 +296,34 @@ contract("DStore" , async(accounts)=>{
             assert.equal(ownerGain.toString(),ownerBalance.diff.toString(),'owner diff');
             assert.equal(buyerPay.toString(),buyerBalance.diff.toString(),'buyer diff');
         });
+   
+        it("product owner cannot buy it" , async()=>{
+
+            //Arange
+            const price=threeEthers;
+            await instance.add('pen',price,{ from : accounts[1] });
+   
+            //Act
+            const all1 = await instance.getAll();
+            await truffleAssert.reverts(
+                instance.buy(all1[0].id, { from : accounts[1], value: price})
+            );
+
+        });
+
+        it.only("invalid price value" , async()=>{
+
+            //Arange
+            await instance.add('pen',threeEthers,{ from : accounts[0] });
+   
+            //Act
+            const all1 = await instance.getAll();
+            await truffleAssert.reverts(
+                instance.buy(all1[0].id, { from : accounts[1], value: fiveEthers})
+            );
+
+        });
+
         
     }); //buy
 }) 

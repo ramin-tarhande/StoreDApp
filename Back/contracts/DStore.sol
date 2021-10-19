@@ -115,6 +115,10 @@ contract DStore {
     function buy(uint id) public payable {
 
         Product storage product=getProduct(id);
+
+        require(product.owner!=msg.sender,"PRODUCT OWNER CANNOT BUY IT");
+        require(product.price==msg.value,"INVALID PRICE VALUE SPECIFIED");
+
         uint price=product.price;
         
         uint ownerGain=price*(100-tollPercent)/100;
