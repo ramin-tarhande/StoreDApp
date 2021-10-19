@@ -105,56 +105,64 @@ contract DStore {
         expectsValidProperties(desc, price)
         checkMaximumAddedFromAddress(){
 
-        Product memory product=Product(curId, desc, price, payable(msg.sender), false,address(0),false);
+        Product memory p=Product(curId, desc, price, payable(msg.sender), false,address(0),false);
 
-        array.push(product);
+        array.push(p);
 
         curId++;
 
-        emit Added(product);
+        emit Added(p);
     }
 
-    function edit(uint id, string memory desc, uint price) public  {
+    function edit(uint id, string memory desc, uint price) public  
+        expectsValidProperties(desc, price){
 
+        Product storage p=getProduct(id);
+
+        require(p.owner==msg.sender,"ONLY OWNER OF A PRODUCT CAN EDIT IT");
+
+        p.description=desc;
+        p.price=price;
         
+        emit Edited(p);
     }
 
 
    function getProduct(uint id) private view expectsValidId(id) returns(Product storage) {
        
-       Product storage product=array[id-startId];
-       return product; 
+       Product storage p=array[id-startId];
+       return p; 
    }
 
    function deleteProduct(uint id) public expectsAdmin {
-       Product storage product=getProduct(id);
-       product.deleted=true;
+       Product storage p=getProduct(id);
+       p.deleted=true;
 
-       emit Deleted(product);
+       emit Deleted(p);
    }
 
     function buy(uint id) public payable checkMaximumBuyingFromAddress() {
 
-        Product storage product=getProduct(id);
+        Product storage p=getProduct(id);
 
-        require(!product.sold,"CANNOT BUY A SOLD PRODUCT");
-        require(product.owner!=msg.sender,"PRODUCT OWNER CANNOT BUY IT");
-        require(product.price==msg.value,"INVALID PRICE VALUE SPECIFIED");
+        require(!p.sold,"CANNOT BUY A SOLD PRODUCT");
+        require(p.owner!=msg.sender,"OWNER OF A PRODUCT CANNOT BUY IT");
+        require(p.price==msg.value,"INVALID PRICE VALUE SPECIFIED");
 
-        uint price=product.price;
+        uint price=p.price;
 
         uint ownerGain=price*(100-tollPercent)/100;
 
-        product.owner.transfer(ownerGain);
+        p.owner.transfer(ownerGain);
 
         //not needed(& doesn't work this way); it's done automatically 
         //uint contractGain=price*tollPercent/100;
         //payable(address(this)).transfer(contractGain);
         
-        product.soldTo=msg.sender;
-        product.sold=true;
+        p.soldTo=msg.sender;
+        p.sold=true;
 
-        emit Sold(product);
+        emit Sold(p);
     }
 
 }

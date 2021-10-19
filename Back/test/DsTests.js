@@ -150,7 +150,7 @@ contract("DStore" , async(accounts)=>{
 
             //Act
             const all = await instance.getAll();
-            await instance.deleteProduct(all[0].id, { from : accounts[0]});
+            await instance.deleteProduct(all[0].id, {from: admin});
             
             //Assert
             const remaining = await instance.getAll();
@@ -171,8 +171,8 @@ contract("DStore" , async(accounts)=>{
 
             //Act
             const all = await instance.getAll();
-            await instance.deleteProduct(all[0].id, { from : accounts[0]});
-            await instance.deleteProduct(all[2].id, { from : accounts[0]});
+            await instance.deleteProduct(all[0].id, {from: admin});
+            await instance.deleteProduct(all[2].id, {from: admin});
             
             //Assert
             const remaining = await instance.getAll();
@@ -192,7 +192,7 @@ contract("DStore" , async(accounts)=>{
             
             //Act
             const all = await instance.getAll();
-            const result=await instance.deleteProduct(all[0].id, { from : accounts[0]});
+            const result=await instance.deleteProduct(all[0].id, {from: admin});
 
             //Assert
             await truffleAssert.eventEmitted( result , "Deleted");
@@ -206,12 +206,11 @@ contract("DStore" , async(accounts)=>{
             //Act
             const all = await instance.getAll();
             await truffleAssert.reverts(
-                instance.deleteProduct(all[0].id, { from : accounts[1]})
+                instance.deleteProduct(all[0].id, {from: admin})
             );
         });
 
     }); //delete
-
 
     describe("buy", async()=>{
         it("update product" , async()=>{
@@ -358,11 +357,11 @@ contract("DStore" , async(accounts)=>{
 
         });
 
-        it.only("event" , async()=>{
+        it("event" , async()=>{
 
             //Arange
             const price=threeEthers;
-            await instance.add('pen',price, { from : accounts[0] });
+            await instance.add('pen',price, {from : accounts[0]});
    
             //Act
             const all = await instance.getAll();
@@ -374,10 +373,9 @@ contract("DStore" , async(accounts)=>{
 
     }); //buy
 
-    /*
     describe("edit", async()=>{
+        
         it("basic" , async()=>{
-
             //Arange
             await instance.add('pen',threeEthers);
    
@@ -392,6 +390,40 @@ contract("DStore" , async(accounts)=>{
             assert.equal(fiveEthers , r.price);
         });
 
+        it("validation" , async()=>{
+            //Arange
+            await instance.add('pen',threeEthers);
+
+            //Act
+            const all1 = await instance.getAll();
+
+            await truffleAssert.reverts(
+                instance.edit(all1[0].id, '',fiveEthers)
+            );
+        });
+
+        it("event" , async()=>{
+            //Arange
+            await instance.add('pen',threeEthers);
+   
+            //Act
+            const all = await instance.getAll();
+            const result= await instance.edit(all[0].id, 'pencil',fiveEthers);
+            
+            //Assert
+            await truffleAssert.eventEmitted( result , "Edited");
+        });
+
+        it("only owner can edit" , async()=>{
+            //Arange
+            await instance.add('pen',threeEthers, {from : accounts[1]});
+   
+            //Act
+            const all = await instance.getAll();
+            await truffleAssert.reverts(
+                instance.edit(all[0].id, 'pencil',fiveEthers, {from : accounts[2]})
+            );
+        });
     }); //edit
-*/
+
 }) 
