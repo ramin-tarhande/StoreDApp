@@ -24,7 +24,7 @@ contract("DStore" , async(accounts)=>{
         return toBN(web3.utils.toWei(num.toString(), "ether"));
     }
 
-    describe("add product", async()=>{
+    describe("add", async()=>{
         it("add one" , async()=>{
 
             //Arange
@@ -132,7 +132,7 @@ contract("DStore" , async(accounts)=>{
 
     }); //add
 
-    describe("delete product", async()=>{
+    describe("delete", async()=>{
         it("delete one" , async()=>{
             //Arange
             await instance.add('pen',threeEthers);
@@ -241,9 +241,9 @@ contract("DStore" , async(accounts)=>{
         it("money transfer" , async()=>{
             //Arange
             const price=threeEthers;
-            const owner=accounts[2];
-            const buyer=accounts[3];
-            await instance.add('pen',price, { from : owner});
+            const owner=accounts[3];
+            const buyer=accounts[1];
+            await instance.add('pen',price, { from: owner});
             
             let ownerBalance=new Object();
             let buyerBalance=new Object();
@@ -255,7 +255,7 @@ contract("DStore" , async(accounts)=>{
             
             //Act
             const all = await instance.getAll();
-            const receipt = await instance.buy(all[0].id, { from : buyer, value: price});
+            const receipt = await instance.buy(all[0].id, { from: buyer, value: price});
                         
             //Assert
             contractBalance.final = await getAccountBalance(instance.address);
