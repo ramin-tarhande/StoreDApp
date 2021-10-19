@@ -111,14 +111,14 @@ contract("DStore" , async(accounts)=>{
                 );
             });
 
-            it("price=10 ether" , async()=>{
+            it("price=10 ethers" , async()=>{
                 //Arange
                 
                 //Act
                 await instance.add('pen',tenEthers);
             });
 
-            it("price>10 ether" , async()=>{
+            it("price>10 ethers" , async()=>{
                 //Arange
                 const price = tenEthers.add(oneWei);
                 

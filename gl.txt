@@ -1,0 +1,29 @@
+commit f66862cfa6cc4b814849a03bac3623450a12e43a
+Author: ramin-tarhande <59169701+ramin-tarhande@users.noreply.github.com>
+Date:   Tue Oct 19 22:17:48 2021 +0330
+
+    minor
+
+commit a864eeb3725f2aff6691f1d500825e8e7cdb79e8
+Author: ramin-tarhande <59169701+ramin-tarhande@users.noreply.github.com>
+Date:   Tue Oct 19 22:14:34 2021 +0330
+
+    rename
+
+commit 6e473b194f3ec76e50b40561b055c630953257e0
+Author: ramin-tarhande <59169701+ramin-tarhande@users.noreply.github.com>
+Date:   Tue Oct 19 21:55:39 2021 +0330
+
+    buy works(percent not done)
+
+commit df1dff38488d60c0fa0309f044cdf611e03e4a5d
+Author: ramin-tarhande <59169701+ramin-tarhande@users.noreply.github.com>
+Date:   Tue Oct 19 19:43:05 2021 +0330
+
+    buy started
+
+commit 01a76d94f0027e1e876f29096a2e6d17919ec4ab
+Author: ramin-tarhande <59169701+ramin-tarhande@users.noreply.github.com>
+Date:   Mon Oct 18 21:08:38 2021 +0330
+
+    first commit: 13passing tests; back is halfdone
