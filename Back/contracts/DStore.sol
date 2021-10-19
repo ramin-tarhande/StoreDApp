@@ -130,12 +130,14 @@ contract DStore {
 
         Product storage product=getProduct(id);
 
+        require(!product.sold,"CANNOT BUY A SOLD PRODUCT");
         require(product.owner!=msg.sender,"PRODUCT OWNER CANNOT BUY IT");
         require(product.price==msg.value,"INVALID PRICE VALUE SPECIFIED");
 
         uint price=product.price;
-        
+
         uint ownerGain=price*(100-tollPercent)/100;
+
         product.owner.transfer(ownerGain);
 
         //not needed(& doesn't work this way); it's done automatically 

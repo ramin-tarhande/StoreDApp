@@ -342,6 +342,21 @@ contract("DStore" , async(accounts)=>{
             );
 
         });
-     
+
+        it.only("cannot buy sold product" , async()=>{
+
+            //Arange
+            const price=threeEthers;
+            await instance.add('pen',price, { from : accounts[0] });
+   
+            //Act
+            const all = await instance.getAll();
+            await instance.buy(all[0].id, { from : accounts[1], value: price});
+            await truffleAssert.reverts(
+                instance.buy(all[0].id, { from : accounts[1], value: price})
+            );
+
+        });
+
     }); //buy
 }) 
