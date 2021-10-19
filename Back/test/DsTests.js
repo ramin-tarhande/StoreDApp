@@ -238,12 +238,12 @@ contract("DStore" , async(accounts)=>{
             assert.equal(accounts[1] , r.soldTo);
         });
 
-        async function getGasFee(receipt){
+        async function getGasTotal(receipt){
             const gasUsed = receipt.receipt.gasUsed;
             const tx = await web3.eth.getTransaction(receipt.tx);
             const gasPrice = tx.gasPrice;
-            const gasFee=toBN(gasPrice*gasUsed);
-            return gasFee;
+            const total=toBN(gasPrice*gasUsed);
+            return total;
         }
 
         async function getAccountBalance(account){
@@ -287,11 +287,11 @@ contract("DStore" , async(accounts)=>{
             //logAb('ownerBalance',ownerBalance);
             //logAb('buyerBalance',buyerBalance);
    
-            const gasFee=await getGasFee(receipt);
+            const gasTotal=await getGasTotal(receipt);
             //console.log(`gasFee: ${gasFee}`); 
 
             assert.equal(price.toString(),ownerBalance.diff.toString(),'owner diff');
-            assert.equal(price.add(gasFee).toString(),buyerBalance.diff.toString(),'buyer diff');
+            assert.equal(price.add(gasTotal).toString(),buyerBalance.diff.toString(),'buyer diff');
         });
         
     }); //buy
