@@ -1,8 +1,6 @@
 const DStore = artifacts.require("DStore");
 const truffleAssert = require('truffle-assertions'); 
-//const BN = web3.utils.BN;
 const toBN = web3.utils.toBN;
-//const BN = require('bn.js');
 
 contract("DStore" , async(accounts)=>{
 
@@ -11,6 +9,7 @@ contract("DStore" , async(accounts)=>{
     let oneEther,tenEthers;
     let threeEthers,fiveEthers;
     let oneWei;
+
     beforeEach("make instance" , async()=>{
          instance = await DStore.new(901);
          admin=accounts[0];
@@ -22,7 +21,6 @@ contract("DStore" , async(accounts)=>{
     });
 
     function toEther(num){
-        //return web3.utils.toBN(web3.utils.toWei(num.toString(), "ether"));
         return toBN(web3.utils.toWei(num.toString(), "ether"));
     }
 
@@ -106,11 +104,6 @@ contract("DStore" , async(accounts)=>{
             it("price<1 ether" , async()=>{
                 //Arange
                 const price = oneEther.sub(oneWei);
-                // console.log(oneEther.toString()); console.log(oneWei.toString()); console.log(price.toString());
-
-                //var u=await instance.checkAdd('pen',price);
-                //console.log("u:"+u);
-                //console.log(u);
 
                 //Act
                 await truffleAssert.reverts(
@@ -247,9 +240,9 @@ contract("DStore" , async(accounts)=>{
         }
 
         async function getAccountBalance(account){
-            const u=await web3.eth.getBalance(account);
-            const v=toBN(u);
-            return v;
+            const v=await web3.eth.getBalance(account);
+            const bn=toBN(v);
+            return bn;
         }
 
         function logAb(title,x){
