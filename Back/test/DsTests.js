@@ -206,7 +206,7 @@ contract("DStore" , async(accounts)=>{
             //Act
             const all = await instance.getAll();
             await truffleAssert.reverts(
-                instance.deleteProduct(all[0].id, {from: admin})
+                instance.deleteProduct(all[0].id, {from : accounts[1]})
             );
         });
 
