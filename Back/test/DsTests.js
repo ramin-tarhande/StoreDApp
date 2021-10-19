@@ -86,18 +86,12 @@ contract("DStore" , async(accounts)=>{
 
         describe("validations", async()=>{
             it("empty description" , async()=>{
-                //Arange
-        
-                //Act
                 await truffleAssert.reverts(
                     instance.add('',threeEthers)
                 );
             });
 
             it("price=1 ether" , async()=>{
-                //Arange
-
-                //Act
                 await instance.add('pen',oneEther);
             });
 
@@ -112,9 +106,6 @@ contract("DStore" , async(accounts)=>{
             });
 
             it("price=10 ethers" , async()=>{
-                //Arange
-                
-                //Act
                 await instance.add('pen',tenEthers);
             });
 
@@ -143,7 +134,6 @@ contract("DStore" , async(accounts)=>{
 
     describe("delete product", async()=>{
         it("delete one" , async()=>{
-
             //Arange
             await instance.add('pen',threeEthers);
             await instance.add('ruler',fiveEthers);
@@ -161,7 +151,6 @@ contract("DStore" , async(accounts)=>{
         });
 
         it("delete two" , async()=>{
-
             //Arange
             await instance.add('pen',threeEthers, { from : accounts[1]});
             await instance.add('ruler',fiveEthers, { from : accounts[1]});
@@ -186,7 +175,6 @@ contract("DStore" , async(accounts)=>{
         });
 
         it("event" , async()=>{
-
             //Arange
             await instance.add('pen',threeEthers);
             
@@ -199,7 +187,6 @@ contract("DStore" , async(accounts)=>{
         });
 
         it("only admin can delete" , async()=>{
-
             //Arange
             await instance.add('pen',threeEthers, { from : accounts[1]});
 
@@ -214,7 +201,6 @@ contract("DStore" , async(accounts)=>{
 
     describe("buy", async()=>{
         it("update product" , async()=>{
-
             //Arange
             const price=threeEthers;
             await instance.add('pen',price, { from : accounts[0] });
@@ -244,7 +230,7 @@ contract("DStore" , async(accounts)=>{
             const bn=toBN(v);
             return bn;
         }
-
+        
         function logAb(title,x){
             console.log(`${title}:`);
             console.log(`  ${x.initial.toString()} (initial)`);
@@ -253,7 +239,6 @@ contract("DStore" , async(accounts)=>{
         }
 
         it("money transfer" , async()=>{
-
             //Arange
             const price=threeEthers;
             const owner=accounts[2];
@@ -297,7 +282,6 @@ contract("DStore" , async(accounts)=>{
         });
    
         it("product owner cannot buy it" , async()=>{
-
             //Arange
             const price=threeEthers;
             await instance.add('pen',price,{ from : accounts[1] });
@@ -311,7 +295,6 @@ contract("DStore" , async(accounts)=>{
         });
 
         it("invalid price value" , async()=>{
-
             //Arange
             await instance.add('pen',threeEthers,{ from : accounts[0] });
    
@@ -324,7 +307,6 @@ contract("DStore" , async(accounts)=>{
         });
      
         it("maximum buying from each address" , async()=>{
-
             //Arange
             await instance.add('pen',threeEthers, {from : accounts[0]});
             await instance.add('ruler',fiveEthers, {from : accounts[0]});
@@ -343,7 +325,6 @@ contract("DStore" , async(accounts)=>{
         });
 
         it("cannot buy sold product" , async()=>{
-
             //Arange
             const price=threeEthers;
             await instance.add('pen',price, { from : accounts[0] });
@@ -354,11 +335,9 @@ contract("DStore" , async(accounts)=>{
             await truffleAssert.reverts(
                 instance.buy(all[0].id, { from : accounts[1], value: price})
             );
-
         });
 
         it("event" , async()=>{
-
             //Arange
             const price=threeEthers;
             await instance.add('pen',price, {from : accounts[0]});
@@ -374,7 +353,6 @@ contract("DStore" , async(accounts)=>{
     }); //buy
 
     describe("edit", async()=>{
-        
         it("basic" , async()=>{
             //Arange
             await instance.add('pen',threeEthers);

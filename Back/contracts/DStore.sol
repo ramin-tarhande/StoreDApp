@@ -127,7 +127,6 @@ contract DStore {
         emit Edited(p);
     }
 
-
    function getProduct(uint id) private view expectsValidId(id) returns(Product storage) {
        
        Product storage p=array[id-startId];
@@ -141,7 +140,7 @@ contract DStore {
        emit Deleted(p);
    }
 
-    function buy(uint id) public payable checkMaximumBuyingFromAddress() {
+   function buy(uint id) public payable checkMaximumBuyingFromAddress() {
 
         Product storage p=getProduct(id);
 
@@ -164,5 +163,4 @@ contract DStore {
 
         emit Sold(p);
     }
-
 }
