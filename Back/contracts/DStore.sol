@@ -65,6 +65,20 @@ contract DStore {
         _;
     }
 
+    modifier checkMaximumBuyingFromAddress(){
+        
+        uint count=0;
+        Product storage p;
+        for (uint i = 0; i < array.length; i++) {
+            p=array[i];
+            if(!p.deleted && !p.available && p.soldTo==msg.sender){
+                count++;
+            }
+        }
+        require(count<=1,"MAXIMUM BUYING FROM EACH ADDRESS IS TWO");
+        _;
+    }
+
     function getAll() public view returns (Product[] memory) {
         uint actualCount=0;
         for (uint i = 0; i < array.length; i++) {
@@ -112,7 +126,7 @@ contract DStore {
        emit Deleted(product);
    }
 
-    function buy(uint id) public payable {
+    function buy(uint id) public payable checkMaximumBuyingFromAddress() {
 
         Product storage product=getProduct(id);
 

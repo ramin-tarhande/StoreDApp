@@ -304,26 +304,44 @@ contract("DStore" , async(accounts)=>{
             await instance.add('pen',price,{ from : accounts[1] });
    
             //Act
-            const all1 = await instance.getAll();
+            const all = await instance.getAll();
             await truffleAssert.reverts(
-                instance.buy(all1[0].id, { from : accounts[1], value: price})
+                instance.buy(all[0].id, { from : accounts[1], value: price})
             );
 
         });
 
-        it.only("invalid price value" , async()=>{
+        it("invalid price value" , async()=>{
 
             //Arange
             await instance.add('pen',threeEthers,{ from : accounts[0] });
    
             //Act
-            const all1 = await instance.getAll();
+            const all = await instance.getAll();
             await truffleAssert.reverts(
-                instance.buy(all1[0].id, { from : accounts[1], value: fiveEthers})
+                instance.buy(all[0].id, { from : accounts[1], value: fiveEthers})
             );
 
         });
+     
+        it.only("maximum buying from each address" , async()=>{
 
-        
+            //Arange
+            await instance.add('pen',threeEthers, {from : accounts[0]});
+            await instance.add('ruler',fiveEthers, {from : accounts[0]});
+            await instance.add('whiteboard',tenEthers, {from : accounts[1]});
+   
+            //Act
+            const all = await instance.getAll();
+            const buyer=accounts[2];
+            await instance.buy(all[0].id, {from : buyer, value: threeEthers});
+            await instance.buy(all[1].id, {from : buyer, value: fiveEthers});
+
+            await truffleAssert.reverts(
+                instance.buy(all[2].id, {from : buyer, value: tenEthers})
+            );
+
+        });
+     
     }); //buy
 }) 
