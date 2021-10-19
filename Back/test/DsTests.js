@@ -343,7 +343,7 @@ contract("DStore" , async(accounts)=>{
 
         });
 
-        it.only("cannot buy sold product" , async()=>{
+        it("cannot buy sold product" , async()=>{
 
             //Arange
             const price=threeEthers;
@@ -358,5 +358,40 @@ contract("DStore" , async(accounts)=>{
 
         });
 
+        it.only("event" , async()=>{
+
+            //Arange
+            const price=threeEthers;
+            await instance.add('pen',price, { from : accounts[0] });
+   
+            //Act
+            const all = await instance.getAll();
+            const result= await instance.buy(all[0].id, { from : accounts[1], value: price});
+   
+            //Assert
+            await truffleAssert.eventEmitted( result , "Sold");
+        });
+
     }); //buy
+
+    /*
+    describe("edit", async()=>{
+        it("basic" , async()=>{
+
+            //Arange
+            await instance.add('pen',threeEthers);
+   
+            //Act
+            const all1 = await instance.getAll();
+            await instance.edit(all1[0].id, 'pencil',fiveEthers);
+            
+            //Assert
+            const all2 = await instance.getAll();
+            const r=all2[0];
+            assert.equal('pencil' , r.description);
+            assert.equal(fiveEthers , r.price);
+        });
+
+    }); //edit
+*/
 }) 

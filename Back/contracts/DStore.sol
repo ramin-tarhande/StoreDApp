@@ -15,7 +15,8 @@ contract DStore {
 
     event Added(Product product);
     event Deleted(Product product);
-    event Sold(uint id,address buyer);
+    event Sold(Product product);
+    event Edited(Product product);
 
     uint startId;
     uint curId;
@@ -113,6 +114,12 @@ contract DStore {
         emit Added(product);
     }
 
+    function edit(uint id, string memory desc, uint price) public  {
+
+        
+    }
+
+
    function getProduct(uint id) private view expectsValidId(id) returns(Product storage) {
        
        Product storage product=array[id-startId];
@@ -146,6 +153,8 @@ contract DStore {
         
         product.soldTo=msg.sender;
         product.sold=true;
+
+        emit Sold(product);
     }
 
 }
