@@ -1,3 +1,51 @@
+commit d934707e22ab0587e7944b1ed29026a76d41c97d
+Author: ramin-tarhande <59169701+ramin-tarhande@users.noreply.github.com>
+Date:   Wed Oct 20 00:27:54 2021 +0330
+
+    cannot buy sold
+
+commit 4166250d1faaeb88782ac3b2fbcf5b513165e650
+Author: ramin-tarhande <59169701+ramin-tarhande@users.noreply.github.com>
+Date:   Wed Oct 20 00:20:04 2021 +0330
+
+    available->sold
+
+commit eb59b3ca898e5a7e3133648a4f5eb0739b7a98a7
+Author: ramin-tarhande <59169701+ramin-tarhande@users.noreply.github.com>
+Date:   Wed Oct 20 00:13:47 2021 +0330
+
+    max from each address
+
+commit 0426583db29fe2811732d04f302f75905e4482be
+Author: ramin-tarhande <59169701+ramin-tarhande@users.noreply.github.com>
+Date:   Tue Oct 19 23:59:01 2021 +0330
+
+    check value
+
+commit ebeda2d4e02edcc1488cf9c3effcf734c25fb45f
+Author: ramin-tarhande <59169701+ramin-tarhande@users.noreply.github.com>
+Date:   Tue Oct 19 23:13:37 2021 +0330
+
+    minor
+
+commit 094ececcaf4cc1dfcbda3e912ee210cc30d80e1a
+Author: ramin-tarhande <59169701+ramin-tarhande@users.noreply.github.com>
+Date:   Tue Oct 19 23:09:39 2021 +0330
+
+    toll done
+
+commit d52522b47629fe652e3101dc18394290c42287b1
+Author: ramin-tarhande <59169701+ramin-tarhande@users.noreply.github.com>
+Date:   Tue Oct 19 22:26:19 2021 +0330
+
+    minor3
+
+commit 766c039c7f30e2478e50bfffe9c040def5c78ce6
+Author: ramin-tarhande <59169701+ramin-tarhande@users.noreply.github.com>
+Date:   Tue Oct 19 22:25:52 2021 +0330
+
+    minor2
+
 commit f66862cfa6cc4b814849a03bac3623450a12e43a
 Author: ramin-tarhande <59169701+ramin-tarhande@users.noreply.github.com>
 Date:   Tue Oct 19 22:17:48 2021 +0330
