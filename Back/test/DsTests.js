@@ -40,7 +40,7 @@ contract("DStore" , async(accounts)=>{
             assert.equal(threeEthers , r.price);
             assert.equal(accounts[1] , r.owner);
 
-            assert.equal(true , r.available);
+            assert.equal(false , r.sold);
             assert.equal(false , r.deleted);
             //console.log("id="+r.id);
             // console.log(await instance.admin());
@@ -227,7 +227,7 @@ contract("DStore" , async(accounts)=>{
             //Assert
             const all2 = await instance.getAll();
             const r=all2[0];
-            assert.equal(false , r.available);
+            assert.equal(true , r.sold);
             assert.equal(false , r.deleted);
             assert.equal(accounts[1] , r.soldTo);
         });
@@ -324,7 +324,7 @@ contract("DStore" , async(accounts)=>{
 
         });
      
-        it.only("maximum buying from each address" , async()=>{
+        it("maximum buying from each address" , async()=>{
 
             //Arange
             await instance.add('pen',threeEthers, {from : accounts[0]});
