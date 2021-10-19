@@ -7,7 +7,7 @@ contract DStore {
         uint id;
         string description;
         uint price;
-        address owner;
+        address payable owner;
         bool available;
         address soldTo;
         bool deleted;
@@ -88,7 +88,7 @@ contract DStore {
         expectsValidProperties(desc, price)
         checkMaximumAddedFromAddress(){
 
-        Product memory product=Product(curId, desc, price, msg.sender, true,address(0),false);
+        Product memory product=Product(curId, desc, price, payable(msg.sender), true,address(0),false);
 
         array.push(product);
 
@@ -109,4 +109,15 @@ contract DStore {
 
        emit Deleted(product);
    }
+
+    function buy(uint id) public payable {
+
+        Product storage product=getProduct(id);
+
+        product.owner.transfer(msg.value);
+        
+        product.soldTo=msg.sender;
+        product.available=false;
+    }
+
 }

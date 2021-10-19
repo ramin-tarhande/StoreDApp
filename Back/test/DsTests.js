@@ -37,6 +37,9 @@ contract("DStore" , async(accounts)=>{
             assert.equal('pen' , r.description);
             assert.equal(threeEthers , r.price);
             assert.equal(accounts[1] , r.owner);
+
+            assert.equal(true , r.available);
+            assert.equal(false , r.deleted);
             //console.log("id="+r.id);
             // console.log(await instance.admin());
             // console.log(accounts[0]);
@@ -89,14 +92,14 @@ contract("DStore" , async(accounts)=>{
                 );
             });
 
-            it("price = 1 ether" , async()=>{
+            it("price=1 ether" , async()=>{
                 //Arange
 
                 //Act
                 await instance.add('pen',oneEther);
             });
 
-            it("price < 1 ether" , async()=>{
+            it("price<1 ether" , async()=>{
                 //Arange
                 const price = oneEther.sub(oneWei);
                 // console.log(oneEther.toString()); console.log(oneWei.toString()); console.log(price.toString());
@@ -111,14 +114,14 @@ contract("DStore" , async(accounts)=>{
                 );
             });
 
-            it("price = 10 ether" , async()=>{
+            it("price=10 ether" , async()=>{
                 //Arange
                 
                 //Act
                 await instance.add('pen',tenEthers);
             });
 
-            it("price > 10 ether" , async()=>{
+            it("price>10 ether" , async()=>{
                 //Arange
                 const price = tenEthers.add(oneWei);
                 
@@ -130,7 +133,7 @@ contract("DStore" , async(accounts)=>{
 
         }); //validation   
 
-        it("maximum products from each address is two" , async()=>{
+        it("maximum from each address is two" , async()=>{
 
             await instance.add('pen',threeEthers, { from : accounts[1]});
             await instance.add('notebook',fiveEthers, { from : accounts[1]});
@@ -210,5 +213,58 @@ contract("DStore" , async(accounts)=>{
             );
         });
 
-    });
+    }); //delete
+
+
+    describe.only("buy", async()=>{
+        it("update product" , async()=>{
+
+            //Arange
+            await instance.add('pen',threeEthers);
+   
+            //Act
+            const all1 = await instance.getAll();
+            await instance.buy(all1[0].id, { from : accounts[1]});
+            
+            //Assert
+            const all2 = await instance.getAll();
+            const r=all2[0];
+            assert.equal(false , r.available);
+            assert.equal(false , r.deleted);
+            assert.equal(accounts[1] , r.soldTo);
+        });
+
+        it("transfer money" , async()=>{
+
+            //Arange
+            const price=threeEthers;
+            const owner=accounts[1];
+            const buyer=accounts[2];
+            await instance.add('pen',price, { from : owner});
+            
+            const ownerBalBefore = await web3.eth.getBalance(owner);
+            const buyerBalBefore = await web3.eth.getBalance(buyer);
+   
+            //Act
+            const all = await instance.getAll();
+            const receipt = await instance.buy(all[0].id, { from : buyer, value: price});
+            const gasUsed = receipt.receipt.gasUsed;
+            console.log(`GasUsed: ${gasUsed}`);
+            
+            //Assert
+            const ownerBalAfter = await web3.eth.getBalance(owner);
+            const buyerBalAfter = await web3.eth.getBalance(buyer);
+   
+            console.log(`price: ${price}`);
+            const diffOwner=ownerBalAfter-ownerBalBefore;
+            const diffBuyer=buyerBalBefore-buyerBalAfter;
+            //console.log(`owner: ${ownerBalBefore}->${ownerBalAfter}`);
+            console.log(`diffOwner: ${diffOwner}`);
+            console.log(`diffBuyer: ${diffBuyer}`);
+
+            assert.equal(price,diffOwner);
+            assert.equal(price+gasUsed,diffBuyer);
+        });
+        
+    }); //buy
 }) 
