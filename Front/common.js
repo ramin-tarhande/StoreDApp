@@ -1,6 +1,7 @@
 var contract;
 var account;
 var web3;
+var isAdmin;
 
 async function initMetamask() { 
     if (window.ethereum) {
@@ -33,15 +34,16 @@ async function init() {
   const contractBalance = await contract.methods.getContractBalance().call();
   console.log('contractBalance :>> ', contractBalance);
 
-  const isAdmin = await contract.methods.isAdmin().call();
-  console.log('isAdmin :>> ', isAdmin);
+  const isAdmin_ct = await contract.methods.isAdmin().call();
+  console.log('isAdmin_ct :>> ', isAdmin_ct);
 
   const admin = await contract.methods.getAdmin().call();
   console.log('admin :>> ', admin);
 
-  const isAdmin2 = (admin==account);
-  console.log('isAdmin2 :>> ', isAdmin2);
+  const isAdmin_fr = (admin==account);
+  console.log('isAdmin2 :>> ', isAdmin_fr);
 
+  isAdmin=isAdmin_fr;
 }
 
 function initContract() {
