@@ -43,8 +43,12 @@ contract DStore {
         _;
     }
 
-    function isAdmin() private view returns (bool) {
+    function isAdmin() public view returns (bool) {
         return msg.sender==admin;
+    }
+
+    function getAdmin() public view returns (address) {
+        return admin;
     }
 
     modifier expectsValidProperties(string memory desc, uint price){

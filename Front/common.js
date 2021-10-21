@@ -1,9 +1,7 @@
 var contract;
-//const web3 = new Web3("HTTP://127.0.0.1:8545")
 var web3;
 
-//const Web3 = require("web3"); 
-async function initJJ() { 
+async function initMetamask() { 
     if (window.ethereum) {
   
       console.log('create web3');
@@ -24,62 +22,25 @@ async function initJJ() {
 
 async function init() {
   
-  await initJJ();
-  
-  
-  //web3 = new Web3("HTTP://127.0.0.1:8545")
-  //initMetamask();
-  //initContract();
-  //ethereum.request({ method: 'eth_requestAccounts' });
-  //connect();
-}
-/*
-function initWeb3(){
-  try {            
-    web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-  } catch (error) {
-    alert(error)
-  }
-}
-*/
-/*
-function connect() {
-  console.log('Calling connect()')
-  ethereum
-  .request({ method: 'eth_requestAccounts' })
-  .then(handleAccountsChanged)
-  .catch((err) => {
-  if (err.code === 4001) {
-      // EIP-1193 userRejectedRequest error
-      // If this happens, the user rejected the connection request.
-      console.log('Please connect to MetaMask.');
-      $('#status').html('You refused to connect Metamask')
-  } else {
-      console.error(err);
-  }
-  });
-}
+  await initMetamask();
 
-function handleAccountsChanged(accounts) {
+  initContract();
 
-}*/
+  const canDelete = await contract.methods.canDelete().call();
+  console.log('canDelete :>> ', canDelete);
 
+  const contractBalance = await contract.methods.getContractBalance().call();
+  console.log('contractBalance :>> ', contractBalance);
 
-function initMetamask() {
-  if (typeof window.ethereum !== 'undefined') {
-    console.log('MetaMask is installed!');
-    web3 = new Web3(window.ethereum);
-    //web3 = new Web3(new Web3.providers.WebsocketProvider("ws://127.0.0.1:8545"));
-    //window.ethereum.enable();
-  }
-  else {
-    //alert("please install your metamask.");
-    window.location.replace("http://127.0.0.1:8080/src/metamsk.html");
-  }
+  const isAdmin = await contract.methods.isAdmin().call();
+  console.log('isAdmin :>> ', isAdmin);
+
+  const admin = await contract.methods.getAdmin().call();
+  console.log('admin :>> ', admin);
 }
 
 function initContract() {
-  const address = "0x745aE742C7757AD8FBcdc346b4AaF7Dd04Cf3950";
+  const address = "0x19eF01795f42f4d313E6851e60268a6987A7F859";
   const abi = [
     {
       "inputs": [
@@ -313,7 +274,86 @@ function initContract() {
     },
     {
       "inputs": [],
+      "name": "isAdmin",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "getAdmin",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
       "name": "getAll",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "id",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "description",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "price",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address payable",
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "sold",
+              "type": "bool"
+            },
+            {
+              "internalType": "address",
+              "name": "soldTo",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "deleted",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct DStore.Product[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "getMyProducts",
       "outputs": [
         {
           "components": [
@@ -417,6 +457,20 @@ function initContract() {
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "canDelete",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -429,10 +483,24 @@ function initContract() {
       "stateMutability": "payable",
       "type": "function",
       "payable": true
+    },
+    {
+      "inputs": [],
+      "name": "getContractBalance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
     }
   ];
 
-  console.log('before contract');
+  console.log('connect to contract');
   contract = new web3.eth.Contract(abi, address);
-  console.log('after contract');
+  console.log(contract);
 }
