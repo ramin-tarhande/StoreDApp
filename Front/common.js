@@ -1,9 +1,9 @@
 var contract;
-var account;
 var web3;
+//var account;
 //var isAdmin;
 
-async function init() {
+async function initCommon() {
 
   await initMetamask();
 
@@ -16,7 +16,7 @@ async function initMetamask() {
       console.log('Metamask is installed');
 
       setWeb3();
-      await setAccount();
+      //await getAccount();
     } 
     else{
       console.log('Metamask is NOT installed');
@@ -30,13 +30,37 @@ function setWeb3() {
   console.log('web3 created');
 }
 
-async function setAccount() {
+async function getAccount() {
   console.log('request accounts');
   await window.ethereum.request({ method: 'eth_requestAccounts' });
   var accounts = await web3.eth.getAccounts();
   account = accounts[0];
   console.log(accounts);
   console.log('account :>> ', account);
+  return account;
+}
+
+function subscribeForEvents(onChange)
+{
+    contract.events.Added({})
+    .on("data" , function(event){
+      onChange(); 
+    });
+
+    contract.events.Deleted({})
+    .on("data" , function(event){
+      onChange(); 
+    });
+
+    contract.events.Sold({})
+    .on("data" , function(event){
+      onChange(); 
+    });
+
+    contract.events.Edited({})
+    .on("data" , function(event){
+      onChange(); 
+    });
 }
 
 /*
