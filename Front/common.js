@@ -5,43 +5,56 @@ var isAdmin;
 
 async function initMetamask() { 
     if (window.ethereum) {
+      
       console.log('Metamask is installed');
-      console.log('create web3');
-      web3 = new Web3(window.ethereum); 
-      console.log('web3 created');
-      console.log('request accounts');
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-      var accounts = await web3.eth.getAccounts();
-      account = accounts[0];
-      console.log(accounts);
-      console.log('account :>> ', account);
+
+      setWeb3();
+      await setAccount();
     } 
     else{
       console.log('Metamask is NOT installed');
       window.location.replace("add-metamask.html");
     }
-  }
+}
+function setWeb3() {
+  console.log('create web3');
+  web3 = new Web3(window.ethereum); 
+  console.log('web3 created');
+}
+
+async function setAccount() {
+  console.log('request accounts');
+  await window.ethereum.request({ method: 'eth_requestAccounts' });
+  var accounts = await web3.eth.getAccounts();
+  account = accounts[0];
+  console.log(accounts);
+  console.log('account :>> ', account);
+}
 
 async function init() {
   
   await initMetamask();
 
-  initContract();
+  await initContract();
 
-  const canDelete = await contract.methods.canDelete().call();
-  console.log('canDelete :>> ', canDelete);
-
-  const contractBalance = await contract.methods.getContractBalance().call();
+  const contractBalance = await contract.methods.getContractBalance().call({from : account});
   console.log('contractBalance :>> ', contractBalance);
 
-  const isAdmin_ct = await contract.methods.isAdmin().call();
+  const isAdmin_ct = await contract.methods.isAdmin().call({from : account});
   console.log('isAdmin_ct :>> ', isAdmin_ct);
 
-  const admin = await contract.methods.getAdmin().call();
+  const isAdmin_ct2 = await contract.methods.isAdmin().call({from : account});
+  console.log('isAdmin_ct2 :>> ', isAdmin_ct2);
+
+  const canDelete = await contract.methods.canDelete().call({from : account});
+  console.log('canDelete :>> ', canDelete);
+  //console.log('typeof canDelete :>> ', typeof canDelete);
+
+  const admin = await contract.methods.getAdmin().call({from : account});
   console.log('admin :>> ', admin);
 
   const isAdmin_fr = (admin==account);
-  console.log('isAdmin2 :>> ', isAdmin_fr);
+  console.log('isAdmin_fr :>> ', isAdmin_fr);
 
   isAdmin=isAdmin_fr;
 }
