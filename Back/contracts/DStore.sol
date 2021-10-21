@@ -39,8 +39,12 @@ contract DStore {
     }
 
     modifier expectsAdmin(){
-        require(msg.sender==admin,"ONLY ADMIN CAN DO THIS");
+        require(isAdmin(),"ONLY ADMIN CAN DO THIS");
         _;
+    }
+
+    function isAdmin() private view returns (bool) {
+        return msg.sender==admin;
     }
 
     modifier expectsValidProperties(string memory desc, uint price){
@@ -81,14 +85,14 @@ contract DStore {
     }
 
     function getAll() public view returns (Product[] memory) {
-        uint actualCount=0;
+        uint effectiveCount=0;
         for (uint i = 0; i < array.length; i++) {
             if(!array[i].deleted){
-                actualCount++;
+                effectiveCount++;
             }
         }
 
-        Product[] memory col=new Product[](actualCount);
+        Product[] memory col=new Product[](effectiveCount);
         Product memory p;
         uint j=0;
         for (uint i = 0; i < array.length; i++) {
@@ -101,6 +105,28 @@ contract DStore {
         return col;
     }
     
+    function getMyProducts() public view returns (Product[] memory) {
+        
+        uint count=0;
+        for (uint i = 0; i < array.length; i++) {
+            if(!array[i].deleted && array[i].owner==msg.sender){
+                count++;
+            }
+        }
+
+        Product[] memory col=new Product[](count);
+        Product memory p;
+        uint j=0;
+        for (uint i = 0; i < array.length; i++) {
+            p=array[i];
+            if(!p.deleted && p.owner==msg.sender){
+                col[j]=p;
+                j++;
+            }
+        }
+        return col;
+    }
+
     function add(string memory desc, uint price) public  
         expectsValidProperties(desc, price)
         checkMaximumAddedFromAddress(){
@@ -140,6 +166,10 @@ contract DStore {
        emit Deleted(p);
    }
 
+   function canDelete() public view returns(bool) {
+       return isAdmin();
+   }
+
    function buy(uint id) public payable checkMaximumBuyingFromAddress() {
 
         Product storage p=getProduct(id);
@@ -163,4 +193,8 @@ contract DStore {
 
         emit Sold(p);
     }
+
+   function getContractBalance() public view returns(uint) {
+       return address(this).balance;
+   }
 }

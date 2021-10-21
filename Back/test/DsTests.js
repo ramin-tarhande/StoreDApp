@@ -24,6 +24,12 @@ contract("DStore" , async(accounts)=>{
         return toBN(web3.utils.toWei(num.toString(), "ether"));
     }
 
+    async function getAccountBalance(account){
+        const v=await web3.eth.getBalance(account);
+        const bn=toBN(v);
+        return bn;
+    }
+
     describe("add", async()=>{
         it("add one" , async()=>{
 
@@ -197,6 +203,27 @@ contract("DStore" , async(accounts)=>{
             );
         });
 
+        describe("canDelete", async()=>{
+            it("admin" , async()=>{
+                //Arange
+
+                //Act
+                const r=await instance.canDelete({ from : accounts[0]});
+
+                //Assert
+                assert.equal(true , r);
+            });
+            it("non-admin" , async()=>{
+                //Arange
+
+                //Act
+                const r=await instance.canDelete({ from : accounts[1]});
+
+                //Assert
+                assert.equal(false, r);
+            });
+        }); //canDelete
+
     }); //delete
 
     describe("buy", async()=>{
@@ -225,12 +252,6 @@ contract("DStore" , async(accounts)=>{
             return total;
         }
 
-        async function getAccountBalance(account){
-            const v=await web3.eth.getBalance(account);
-            const bn=toBN(v);
-            return bn;
-        }
-        
         function logAb(title,x){
             console.log(`${title}:`);
             console.log(`  ${x.initial.toString()} (initial)`);
@@ -314,7 +335,7 @@ contract("DStore" , async(accounts)=>{
    
             //Act
             const all = await instance.getAll();
-            const buyer=accounts[2];
+            const buyer=accounts[1];
             await instance.buy(all[0].id, {from : buyer, value: threeEthers});
             await instance.buy(all[1].id, {from : buyer, value: fiveEthers});
 
@@ -403,5 +424,37 @@ contract("DStore" , async(accounts)=>{
             );
         });
     }); //edit
+
+    describe("others", async()=>{
+        it("my products" , async()=>{
+            //Arange
+            await instance.add('pen',oneEther,{from : accounts[1]});
+            await instance.add('ruler',threeEthers,{from : accounts[2]});
+            await instance.add('whiteboard',fiveEthers,{from : accounts[1]});
+
+            //Act
+            const r = await instance.getMyProducts({from : accounts[1]});
+            
+            //Assert
+            assert.equal(2 , r.length);
+            assert.equal('pen' , r[0].description);
+            assert.equal('whiteboard' , r[1].description);
+        });
+
+        it("contract balance" , async()=>{
+            const price=threeEthers;
+            await instance.add('pen',price, { from : accounts[0] });
+   
+            //Act
+            const all = await instance.getAll();
+            await instance.buy(all[0].id, { from : accounts[1], value: price});
+
+            const r = await instance.getContractBalance();
+            
+            //Assert
+            const actualBalance=await getAccountBalance(instance.address);
+            assert.equal(actualBalance.toString() , r.toString());
+        });
+    });
 
 }) 
