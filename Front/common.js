@@ -4,22 +4,20 @@ var web3;
 
 async function initMetamask() { 
     if (window.ethereum) {
-  
+      console.log('Metamask is installed');
       console.log('create web3');
       web3 = new Web3(window.ethereum); 
       console.log('web3 created');
       console.log('request accounts');
-      //await window.ethereum.request('eth_requestAccounts'); 
       await window.ethereum.request({ method: 'eth_requestAccounts' });
-      //const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      //console.log('request done');
       var accounts = await web3.eth.getAccounts();
       account = accounts[0];
       console.log(accounts);
       console.log('account :>> ', account);
     } 
     else{
-
+      console.log('Metamask is NOT installed');
+      window.location.replace("add-metamask.html");
     }
   }
 
