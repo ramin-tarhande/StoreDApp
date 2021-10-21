@@ -1,7 +1,14 @@
 var contract;
 var account;
 var web3;
-var isAdmin;
+//var isAdmin;
+
+async function init() {
+
+  await initMetamask();
+
+  await initContract();
+}
 
 async function initMetamask() { 
     if (window.ethereum) {
@@ -16,6 +23,7 @@ async function initMetamask() {
       window.location.replace("add-metamask.html");
     }
 }
+
 function setWeb3() {
   console.log('create web3');
   web3 = new Web3(window.ethereum); 
@@ -31,12 +39,8 @@ async function setAccount() {
   console.log('account :>> ', account);
 }
 
-async function init() {
-  
-  await initMetamask();
-
-  await initContract();
-
+/*
+async function initExtra(){
   const contractBalance = await contract.methods.getContractBalance().call({from : account});
   console.log('contractBalance :>> ', contractBalance);
 
@@ -57,7 +61,7 @@ async function init() {
   console.log('isAdmin_fr :>> ', isAdmin_fr);
 
   isAdmin=isAdmin_fr;
-}
+}*/
 
 function initContract() {
   const abi = [
