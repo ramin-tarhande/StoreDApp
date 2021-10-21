@@ -1,4 +1,5 @@
 var contract;
+var account;
 var web3;
 
 async function initMetamask() { 
@@ -13,7 +14,9 @@ async function initMetamask() {
       //const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       //console.log('request done');
       var accounts = await web3.eth.getAccounts();
+      account = accounts[0];
       console.log(accounts);
+      console.log('account :>> ', account);
     } 
     else{
 
@@ -37,10 +40,13 @@ async function init() {
 
   const admin = await contract.methods.getAdmin().call();
   console.log('admin :>> ', admin);
+
+  const isAdmin2 = (admin==account);
+  console.log('isAdmin2 :>> ', isAdmin2);
+
 }
 
 function initContract() {
-  const address = "0x19eF01795f42f4d313E6851e60268a6987A7F859";
   const abi = [
     {
       "inputs": [
@@ -499,6 +505,8 @@ function initContract() {
       "constant": true
     }
   ];
+
+  const address = "0x18Ca79bE3C4FF552A9c72f893F724C52BEfDeB13";
 
   console.log('connect to contract');
   contract = new web3.eth.Contract(abi, address);
