@@ -20,41 +20,29 @@
         <li class="nav-item">
           <a class="nav-link" href="./index.html">Home</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="./my-products.html">My products</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="./catalog.html">Catalog</a>
+        </li>
         <li class="nav-item active">
-          <a class="nav-link" href="#">My products</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="./catalog.html">Catalog</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="./delete.html">Delete</a>
+          <a class="nav-link" href="#">Delete</a>
       </li>
       </ul>
     </div>
   </nav>
 
-<div class="container mt-5">
+  <div class="container mt-5">
 
-    
-    <form class="border p-3 bg-light col-5">
-      <div class="form-group">
-        <label>Description</label>
-        <input type="text" class="form-control" id="description" placeholder="Enter description about the item">
-      </div>
-      <div class="form-group">
-        <label>Price</label>
-        <input type="text" class="form-control" id="price" placeholder="Enter price in ethers">
-      </div>
-      <button type="button" class="btn btn-primary" id="add">Add product</button>
-      
-      <div class="text-danger mt-3" id="error"></div>
-    </form>
+    <h4 id="permission"></h4>
+    <div class="text-danger mt-3" id="error"></div>
 
-
-    <table class="table table-hover mt-5 col-5 border">
+    <table class="table table-hover mt-5 col-5 border" id="table" style="display:none">
         <thead class="bg-light">
             <th class="col-8">Description</th>
             <th>Price</th>
+            <th>Owner</th>
             <th>Id</th>
             <th></th>
         </thead>
@@ -62,7 +50,7 @@
         </tbody>
     </table>
 
-</div>
+    </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -70,19 +58,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1-rc.0/web3.min.js"></script>
 
   <script src="./common.js"></script>
-  <script src="./my-products.js"></script>
+  <script src="./delete.js"></script>
 
   <script>
     $(function () {
 
-      initMyProducts($("#tableBody"));
+        
+        initDelete($("#table"),$("#tableBody"),$("#permission"),$("#error"));
       
-      $("#add").click(function () {
-
-        addProduct($("#description").val(),$("#price").val(),
-                   $("#error"),$("#description"));
-      });
-
     })
 
   </script>
