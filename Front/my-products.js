@@ -43,7 +43,15 @@ function edit(id){
     window.location.href = `./edit.html?id=${id}`;
 };
 
+
 async function addProduct(description,price,error,afterFocus) {
+    
+    const v=validate(description,price,error);    
+    if(!v){
+        return;
+    }
+
+    error.text('');
     
     try{
         const weis = web3.utils.toWei(price, "ether"); 
@@ -55,12 +63,11 @@ async function addProduct(description,price,error,afterFocus) {
     
         console.log(`receipt:`);
         console.log(receipt);
-        //success.text(`'${description}' added`);
-        error.text('');
+        
         afterFocus.focus();
     }catch(e){
         console.log(e);
-        //success.text('');
-        error.html(`Operation failed<br/> <i>${e.message}</i>`);
+        //error.html(`Operation failed<br/> <i>${e.message}</i>`);
+        showFailureHelp(error);
     }
 }

@@ -1,7 +1,5 @@
 var contract;
 var web3;
-//var account;
-//var isAdmin;
 
 async function initCommon() {
 
@@ -13,10 +11,9 @@ async function initCommon() {
 async function initMetamask() { 
     if (window.ethereum) {
       
-      console.log('Metamask is installed');
+      //console.log('Metamask is installed');
 
       setWeb3();
-      //await getAccount();
     } 
     else{
       console.log('Metamask is NOT installed');
@@ -25,17 +22,17 @@ async function initMetamask() {
 }
 
 function setWeb3() {
-  console.log('create web3');
+  //console.log('create web3');
   web3 = new Web3(window.ethereum); 
-  console.log('web3 created');
+  //console.log('web3 created');
 }
 
 async function getAccount() {
-  console.log('request accounts');
+  //console.log('request accounts');
   await window.ethereum.request({ method: 'eth_requestAccounts' });
   var accounts = await web3.eth.getAccounts();
   account = accounts[0];
-  console.log(accounts);
+  //console.log(accounts);
   console.log('account :>> ', account);
   return account;
 }
@@ -549,7 +546,7 @@ function initContract() {
 
   const address = "0x18Ca79bE3C4FF552A9c72f893F724C52BEfDeB13";
 
-  console.log('connect to contract');
+  //console.log('connect to contract');
   contract = new web3.eth.Contract(abi, address);
-  console.log(contract);
+  //console.log(contract);
 }
