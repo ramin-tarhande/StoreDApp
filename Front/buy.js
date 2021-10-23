@@ -41,5 +41,5 @@ async function showItems(tableBody) {
 
 function buy(id){
     
-    window.location.href = `./buy.html?id=${id}`;
+    window.location.href = `./buy-product.html?id=${id}`;
 };
