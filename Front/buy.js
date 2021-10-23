@@ -1,4 +1,4 @@
-async function initCatalog(tableBody){
+async function initBuy(tableBody){
     await initCommon();
 
     await showItems(tableBody);

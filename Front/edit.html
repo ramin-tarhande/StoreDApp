@@ -21,10 +21,10 @@
           <a class="nav-link" href="./index.html">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="./sell.html">Sell</a>
+          <a class="nav-link" href="#">Sell</a>
         </li>
-        <li class="nav-item active">
-            <a class="nav-link" href="#">Buy</a>
+        <li class="nav-item">
+          <a class="nav-link" href="./buy.html">Buy</a>
         </li>
 
         <li class="nav-item dropdown">
@@ -40,20 +40,21 @@
     </div>
   </nav>
 
-  
-  <div class="container mt-5">
-
-    <table class="table table-hover mt-5 col-5 border">
-        <thead class="bg-light">
-            <th class="col-8">Description</th>
-            <th>Price</th>
-            <th>Owner</th>
-            <th>Id</th>
-            <th></th>
-        </thead>
-        <tbody id="tableBody">
-        </tbody>
-    </table>
+<div class="container mt-5">
+    
+    <form class="border p-3 bg-light col-5">
+      <div class="form-group">
+        <label>Description</label>
+        <input type="text" class="form-control" id="description" placeholder="Enter description about the item">
+      </div>
+      <div class="form-group">
+        <label>Price</label>
+        <input type="text" class="form-control" id="price" placeholder="Enter price in ethers">
+      </div>
+      <button type="button" class="btn btn-primary" id="btn">Update</button>
+      
+      <div class="text-danger mt-3" id="error"></div>
+    </form>
 
 </div>
 
@@ -63,12 +64,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1-rc.0/web3.min.js"></script>
 
   <script src="./common.js"></script>
-  <script src="./buy.js"></script>
+  <script src="./product-validation.js"></script>
+  <script src="./edit.js"></script>
 
   <script>
     $(function () {
 
-      initBuy($("#tableBody"));
+      initEdit($("#description"),$("#price"),$("#error"),$("#btn"));
+      
       
     })
 

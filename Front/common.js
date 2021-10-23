@@ -33,7 +33,7 @@ async function getAccount() {
   var accounts = await web3.eth.getAccounts();
   account = accounts[0];
   //console.log(accounts);
-  console.log('account :>> ', account);
+  //console.log('account :>> ', account);
   return account;
 }
 
@@ -54,7 +54,7 @@ function subscribeForEvents(onChange)
       onChange(); 
     });
 
-    contract.events.Edited({})
+    contract.events.Updated({})
     .on("data" , function(event){
       onChange(); 
     });
@@ -249,7 +249,7 @@ function initContract() {
           "type": "tuple"
         }
       ],
-      "name": "Edited",
+      "name": "Sold",
       "type": "event"
     },
     {
@@ -299,7 +299,7 @@ function initContract() {
           "type": "tuple"
         }
       ],
-      "name": "Sold",
+      "name": "Updated",
       "type": "event"
     },
     {
@@ -482,10 +482,67 @@ function initContract() {
           "type": "uint256"
         }
       ],
-      "name": "edit",
+      "name": "update",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "name": "get",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "id",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "description",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "price",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address payable",
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "sold",
+              "type": "bool"
+            },
+            {
+              "internalType": "address",
+              "name": "soldTo",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "deleted",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct DStore.Product",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -544,7 +601,7 @@ function initContract() {
     }
   ];
 
-  const address = "0x18Ca79bE3C4FF552A9c72f893F724C52BEfDeB13";
+  const address = "0xda441Ece13A78fB35D027bA0cEC1189625B082Ea";
 
   //console.log('connect to contract');
   contract = new web3.eth.Contract(abi, address);

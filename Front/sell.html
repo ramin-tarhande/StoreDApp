@@ -32,7 +32,7 @@
             Admin
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="./Delete.html">Delete products</a>
+            <a class="dropdown-item" href="./delete.html">Delete products</a>
           </div>
         </li>
 
@@ -42,32 +42,32 @@
 
 <div class="container mt-5">
 
+  <table class="table table-hover mt-5 col-5 border">
+    <thead class="bg-light">
+        <th class="col-8">Description</th>
+        <th>Price</th>
+        <th>Id</th>
+        <th></th>
+    </thead>
+    <tbody id="tableBody">
+    </tbody>
+  </table>
+
+
+  <form class="border p-3 bg-light col-5">
+    <div class="form-group">
+      <label>Description</label>
+      <input type="text" class="form-control" id="description" placeholder="Enter description about the item">
+    </div>
+    <div class="form-group">
+      <label>Price</label>
+      <input type="text" class="form-control" id="price" placeholder="Enter price in ethers">
+    </div>
+    <button type="button" class="btn btn-primary" id="add">Add product</button>
     
-    <form class="border p-3 bg-light col-5">
-      <div class="form-group">
-        <label>Description</label>
-        <input type="text" class="form-control" id="description" placeholder="Enter description about the item">
-      </div>
-      <div class="form-group">
-        <label>Price</label>
-        <input type="text" class="form-control" id="price" placeholder="Enter price in ethers">
-      </div>
-      <button type="button" class="btn btn-primary" id="add">Add product</button>
-      
-      <div class="text-danger mt-3" id="error"></div>
-    </form>
+    <div class="text-danger mt-3" id="error"></div>
+  </form>
 
-
-    <table class="table table-hover mt-5 col-5 border">
-        <thead class="bg-light">
-            <th class="col-8">Description</th>
-            <th>Price</th>
-            <th>Id</th>
-            <th></th>
-        </thead>
-        <tbody id="tableBody">
-        </tbody>
-    </table>
 
 </div>
 
@@ -83,7 +83,7 @@
   <script>
     $(function () {
 
-      initMyProducts($("#tableBody"));
+      initSell($("#tableBody"));
       
       $("#add").click(function () {
 

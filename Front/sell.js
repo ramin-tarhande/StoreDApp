@@ -1,4 +1,4 @@
-async function initMyProducts(tableBody){
+async function initSell(tableBody){
     await initCommon();
 
     await showItems(tableBody);

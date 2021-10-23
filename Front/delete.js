@@ -22,7 +22,7 @@ async function canDelete() {
 
     const account = await getAccount();
     const r=await contract.methods.canDelete().call({ from: account });
-    console.log('r :>> ', r);
+    //console.log('r :>> ', r);
     return r;
 }
 

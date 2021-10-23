@@ -16,7 +16,7 @@ contract DStore {
     event Added(Product product);
     event Deleted(Product product);
     event Sold(Product product);
-    event Edited(Product product);
+    event Updated(Product product);
 
     uint startId;
     uint curId;
@@ -144,27 +144,33 @@ contract DStore {
         emit Added(p);
     }
 
-    function edit(uint id, string memory desc, uint price) public  
+    function update(uint id, string memory desc, uint price) public  
         expectsValidProperties(desc, price){
 
-        Product storage p=getProduct(id);
+        Product storage p=find(id);
 
-        require(p.owner==msg.sender,"ONLY OWNER OF A PRODUCT CAN EDIT IT");
+        require(p.owner==msg.sender,"ONLY OWNER OF A PRODUCT CAN UPDATE IT");
 
         p.description=desc;
         p.price=price;
         
-        emit Edited(p);
+        emit Updated(p);
     }
 
-   function getProduct(uint id) private view expectsValidId(id) returns(Product storage) {
+   function get(uint id) public view expectsValidId(id) returns(Product memory) {
+       
+       Product memory p=array[id-startId];
+       return p; 
+   }
+
+   function find(uint id) private view expectsValidId(id) returns(Product storage) {
        
        Product storage p=array[id-startId];
        return p; 
    }
 
    function deleteProduct(uint id) public expectsAdmin {
-       Product storage p=getProduct(id);
+       Product storage p=find(id);
        p.deleted=true;
 
        emit Deleted(p);
@@ -176,7 +182,7 @@ contract DStore {
 
    function buy(uint id) public payable checkMaximumBuyingFromAddress() {
 
-        Product storage p=getProduct(id);
+        Product storage p=find(id);
 
         require(!p.sold,"CANNOT BUY A SOLD PRODUCT");
         require(p.owner!=msg.sender,"OWNER OF A PRODUCT CANNOT BUY IT");
