@@ -25,4 +25,3 @@ function showFailureHelp(error,add) {
     </ul>
     </small>`);
 }
-
