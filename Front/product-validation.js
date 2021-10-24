@@ -15,7 +15,14 @@ function validate(description,price,error) {
     return true;
 }
 
-function showFailureHelp(error) {
-    error.html(`<small>adding product failed<br/>price should be between 1 & 10 ethers<br/>maximum number of products added from each account is 2</small>`);
+function showFailureHelp(error,add) {
+    const extra=add?'<li>maximum number of products per accounts is not exceeded</li>':'';
+    error.html(`<small>
+    operation failed. check that:
+    <ul>
+    <li>price is in allowed range</li>
+    ${extra}
+    </ul>
+    </small>`);
 }
 

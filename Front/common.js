@@ -8,6 +8,7 @@ async function initCommon(balanceField) {
 
   await initContract();
 
+  //await initExtra();
   await showBalance();
 }
 
@@ -66,14 +67,17 @@ function subscribeForEvents(onChange)
 
 async function showBalance() { 
   const account=await getAccount();
-  const balance = await contract.methods.getContractBalance().call({ from: account });
+  //console.log('account :>> ', account);
+  let balance = await contract.methods.getContractBalance().call({ from: account });
   const ether = web3.utils.fromWei(balance, 'ether');
   balanceFd.text(ether);
+  //console.log('balance :>> ', balance);
   //console.log('balance :>> ', ether);
 }
 
 /*
 async function initExtra(){
+  const account=await getAccount();
   const contractBalance = await contract.methods.getContractBalance().call({from : account});
   console.log('contractBalance :>> ', contractBalance);
 
@@ -94,15 +98,35 @@ async function initExtra(){
   console.log('isAdmin_fr :>> ', isAdmin_fr);
 
   isAdmin=isAdmin_fr;
-}*/
-
+}
+*/
 function initContract() {
   const abi = [
     {
       "inputs": [
         {
           "internalType": "uint256",
+          "name": "_minPrice",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_maxPrice",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
           "name": "_tollPercent",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_maxAddPerAddress",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_maxBuyPerAddress",
           "type": "uint256"
         },
         {
@@ -613,7 +637,7 @@ function initContract() {
     }
   ];
 
-  const address = "0xda441Ece13A78fB35D027bA0cEC1189625B082Ea";
+  const address = "0xD501055e3Ddb5Bca6aB633E05cc330505eC528f1";
 
   //console.log('connect to contract');
   contract = new web3.eth.Contract(abi, address);

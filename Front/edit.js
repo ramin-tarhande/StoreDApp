@@ -51,6 +51,6 @@ async function updateProduct(id,description,price,errorFd) {
     }catch(e){
         console.log(e);
         //error.html(`Operation failed<br/> <i>${e.message}</i>`);
-        showFailureHelp(errorFd);
+        showFailureHelp(errorFd,false);
     }
 }

@@ -50,6 +50,9 @@ async function buyProduct(p,errorFd) {
         
     }catch(e){
         console.log(e);
-        errorFd.html(`Operation failed`);
+        errorFd.html(`operation failed. check that:
+        <ul>
+        <li>maximum buying per address is not exceeded</li>
+        </ul>`);
     }
 }

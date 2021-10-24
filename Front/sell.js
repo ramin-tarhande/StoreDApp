@@ -70,6 +70,6 @@ async function addProduct(description,price,error,afterFocus) {
     }catch(e){
         console.log(e);
         //error.html(`Operation failed<br/> <i>${e.message}</i>`);
-        showFailureHelp(error);
+        showFailureHelp(error,true);
     }
 }
