@@ -24,15 +24,24 @@ contract DStore {
     address public admin;
     uint tollPercent;
 
+    uint minPrice;
+    uint maxPrice;
+    
     uint maxAddPerAddress;
     uint maxBuyPerAddress;
-    constructor(uint _tollPercent,uint _maxAddPerAddress,uint _maxBuyPerAddress,uint _startId){
+
+    constructor(uint _minPrice,uint _maxPrice,uint _tollPercent,
+        uint _maxAddPerAddress,uint _maxBuyPerAddress,uint _startId){
+    
+        minPrice=_minPrice;
+        maxPrice=_maxPrice;
         startId=_startId;
         curId = startId;
-        admin=msg.sender;
         tollPercent=_tollPercent;
         maxAddPerAddress=_maxAddPerAddress;
         maxBuyPerAddress=_maxBuyPerAddress;
+
+        admin=msg.sender;
     }
 
     modifier expectsValidId(uint id){
@@ -60,7 +69,8 @@ contract DStore {
         bytes memory descBytes = bytes(desc);
         require(descBytes.length>0,"EMPTY DESCRIPTION NOT ALLOWED");
 
-        require(price>=1 ether && price<=10 ether,"PRICE CAN BE BETWEEN 1 AND 10 ETHERS");
+        require(price>=minPrice*(1 ether) && price<=maxPrice*(1 ether),
+            "PRICE SHOULD BE IN THE RANGE DEFINED");
         _;
     }
 
