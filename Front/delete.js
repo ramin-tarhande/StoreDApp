@@ -14,8 +14,7 @@ async function initDelete(table,tableBody,permissionFd,errorFd,balanceFd){
         subscribeForEvents(()=>showItems(tableBody));
     }
     else{
-        
-        permissionFd.html(`you don't have the permission to delete products`);        
+        permissionFd.html(`you don't have permission to delete products`);        
     }
 }
 async function canDelete() {
