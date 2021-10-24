@@ -24,11 +24,15 @@ contract DStore {
     address public admin;
     uint tollPercent;
 
-    constructor(uint _tollPercent,uint _startId){
+    uint maxAddPerAddress;
+    uint maxBuyPerAddress;
+    constructor(uint _tollPercent,uint _maxAddPerAddress,uint _maxBuyPerAddress,uint _startId){
         startId=_startId;
         curId = startId;
         admin=msg.sender;
         tollPercent=_tollPercent;
+        maxAddPerAddress=_maxAddPerAddress;
+        maxBuyPerAddress=_maxBuyPerAddress;
     }
 
     modifier expectsValidId(uint id){
@@ -70,7 +74,7 @@ contract DStore {
                 count++;
             }
         }
-        require(count<=1,"MAXIMUM PRODUCTS ALLOWED FROM EACH ADDRESS IS TWO");
+        require(count<maxAddPerAddress,"CANNOT EXCEED MAXIMUM PRODUCTS PER ADDRESS");
         _;
     }
 
@@ -84,7 +88,7 @@ contract DStore {
                 count++;
             }
         }
-        require(count<=1,"MAXIMUM BUYING FROM EACH ADDRESS IS TWO");
+        require(count<maxBuyPerAddress,"CANNOT EXCEED MAXIMUM BUYINGS PER ADDRESS");
         _;
     }
 

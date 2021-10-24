@@ -11,7 +11,7 @@ contract("DStore" , async(accounts)=>{
     let oneWei;
 
     beforeEach("make instance" , async()=>{
-         instance = await DStore.new(10,901);
+         instance = await DStore.new(10,2,2,901);
          admin=accounts[0];
          oneEther=toEther(1);
          tenEthers=toEther(10);
