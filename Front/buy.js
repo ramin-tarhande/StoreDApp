@@ -14,22 +14,18 @@ async function showItems(tableBody) {
 
     var html='';
     for(let i=0;i<products.length;i++){
-        let x=products[i];
+        let p=products[i];
         
         //console.log(x);
-        const ether = web3.utils.fromWei(x.price, 'ether');
-        
+        const ether = web3.utils.fromWei(p.price, 'ether');
+        const lastCell=createLastCell(account,p);
         html+= `
             <tr> 
-            <td>${x.description}</td>
+            <td>${p.description}</td>
             <td>${ether}</td>
-            <td>${x.owner}</td>
-            <td>${x.id}</td>
-            <td> 
-                <button type="button" class="btn btn-success" onclick="buy(${x.id})">
-                    Buy
-                </button> 
-            </td>
+            <td><small>${p.owner}<small></td>
+            <td>${p.id}</td>
+            <td>${lastCell}</td>
             </tr>
             `;
 
@@ -37,6 +33,17 @@ async function showItems(tableBody) {
     }
 
     tableBody.html(html);
+}
+function createLastCell(account,p){
+    if(account==p.owner){
+        return '<label class="text-muted">mine</label>';
+    }
+    else if(p.sold){
+        return '<label class="text-danger">sold</label>';
+    }
+    else{
+        return `<button type="button" class="btn btn-success" onclick="buy(${p.id})">Buy</button>`
+    }
 }
 
 function buy(id){

@@ -43,7 +43,7 @@ async function showItems(tableBody) {
             <tr> 
             <td>${x.description}</td>
             <td>${ether}</td>
-            <td>${x.owner}</td>
+            <td><small>${x.owner}<small></td>
             <td>${x.id}</td>
             <td> 
                 <button type="button" class="btn btn-success" onclick="deleteProduct(${x.id})">
