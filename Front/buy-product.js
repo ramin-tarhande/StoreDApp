@@ -1,8 +1,8 @@
-async function initBuyProduct(descriptionFd,priceFd,errorFd,btn){
+async function initBuyProduct(descriptionFd,priceFd,errorFd,btn,balanceFd){
     var urlParams = new URLSearchParams(window.location.search);
     var id=urlParams.get('id');
       
-    await initCommon();
+    await initCommon(balanceFd);
 
     const p=await load(id);
 

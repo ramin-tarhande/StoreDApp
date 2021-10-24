@@ -1,5 +1,5 @@
-async function initBuy(tableBody){
-    await initCommon();
+async function initBuy(tableBody,balanceFd){
+    await initCommon(balanceFd);
 
     await showItems(tableBody);
 

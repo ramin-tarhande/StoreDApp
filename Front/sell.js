@@ -1,5 +1,7 @@
-async function initSell(tableBody){
-    await initCommon();
+async function initSell(tableBody,balanceFd){
+
+    //console.log('balanceFd :>> ', balanceFd);
+    await initCommon(balanceFd);
 
     await showItems(tableBody);
 

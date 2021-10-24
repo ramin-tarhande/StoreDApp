@@ -1,8 +1,8 @@
 var errorField;
-async function initDelete(table,tableBody,permissionFd,errorFd){
+async function initDelete(table,tableBody,permissionFd,errorFd,balanceFd){
     errorField=errorFd;
 
-    await initCommon();
+    await initCommon(balanceFd);
     
     const cd=await canDelete();
     if(cd){

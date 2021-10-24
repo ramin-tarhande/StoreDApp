@@ -1,11 +1,14 @@
 var contract;
 var web3;
+var balanceFd;
+async function initCommon(balanceField) {
 
-async function initCommon() {
-
+  balanceFd=balanceField;
   await initMetamask();
 
   await initContract();
+
+  await showBalance();
 }
 
 async function initMetamask() { 
@@ -51,6 +54,7 @@ function subscribeForEvents(onChange)
 
     contract.events.Sold({})
     .on("data" , function(event){
+      showBalance();
       onChange(); 
     });
 
@@ -58,6 +62,14 @@ function subscribeForEvents(onChange)
     .on("data" , function(event){
       onChange(); 
     });
+}
+
+async function showBalance() { 
+  const account=await getAccount();
+  const balance = await contract.methods.getContractBalance().call({ from: account });
+  const ether = web3.utils.fromWei(balance, 'ether');
+  balanceFd.text(ether);
+  //console.log('balance :>> ', ether);
 }
 
 /*

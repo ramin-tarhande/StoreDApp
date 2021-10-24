@@ -37,6 +37,14 @@
         </li>
 
       </ul>
+
+      <form class="form-inline my-2 my-lg-0">
+        <span class="navbar-text mr-3">
+          Smart contract balance:
+        </span>
+        <label class="form-control my-2 my-lg-0 mr-sm-2" id="balance"></label>
+      </form>
+
     </div>
   </nav>
 
@@ -69,7 +77,7 @@
   <script>
     $(function () {
 
-      initBuyProduct($("#description"),$("#price"),$("#error"),$("#btn"));
+      initBuyProduct($("#description"),$("#price"),$("#error"),$("#btn"),$("#balance"));
       
     })
 
