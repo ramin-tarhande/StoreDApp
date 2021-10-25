@@ -1,5 +1,5 @@
 # StoreDApp
-Decentralized store using Ethereum Block chain  
+Decentralized store using Ethereum blockchain  
 
 ## Front: 
   This folder contains front-end code & was built with Html, Javacript/jQuery, Bootstrap & Web3.  
